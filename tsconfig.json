@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./node_modules",
+    "outDir": "public/src",
+    "target": "es2015",
+    "module": "es2015",
+    "moduleResolution": "node"
+  },
+  "files": [
+    "src/index.ts"
+  ]
+}
