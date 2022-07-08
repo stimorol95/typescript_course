@@ -1,24 +1,47 @@
-import { renderSearchFormBlock } from './search-form.js'
-import { renderSearchStubBlock } from './search-results.js'
-import { renderUserBlock } from './user.js'
-import { renderToast } from './lib.js'
+import { renderSearchFormBlock } from "./search-form.js";
+import { renderSearchStubBlock } from "./search-results.js";
+import { renderUserBlock } from "./user.js";
+import { renderToast } from "./lib.js";
+import { searchHandler } from "./search-form-data.js";
+import { getTodosByCount } from "./api.js";
 
-const userName = 'Wade Warren'
-const avatarSrc = 'img/avatar.png'
-const favoriteItemsAmount = 0
+localStorage.setItem("user", "");
+localStorage.setItem("favoritesAmount", "6");
 
-const checkInDate = new Date()
-checkInDate.setDate(checkInDate.getDate() + 1)
+localStorage.user = JSON.stringify({
+  userName: "Girl",
+  userAvatar: "/img/avatar.png",
+});
 
-const checkOutDate = new Date()
-checkOutDate.setDate(checkInDate.getDate() + 2)
+function getUserData() {
+  let user: unknown = JSON.parse(localStorage.getItem("user"));
 
-window.addEventListener('DOMContentLoaded', () => {
-  renderUserBlock(userName, avatarSrc, favoriteItemsAmount)
-  renderSearchFormBlock(checkInDate, checkOutDate)
-  renderSearchStubBlock()
-  renderToast(
-    {text: 'Это пример уведомления. Используйте его при необходимости', type: 'success'},
-    {name: 'Понял', handler: () => {console.log('Уведомление закрыто')}}
-  )
-})
+  interface User {
+    userName: string;
+    userAvatar: string;
+  }
+
+  return user as User;
+}
+
+function getFavoritesAmount() {
+  let favorite: unknown = localStorage.getItem("favoritesAmount");
+  return favorite as Number;
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  renderUserBlock(
+    getUserData().userName,
+    getUserData().userAvatar,
+    getFavoritesAmount()
+  );
+  renderSearchFormBlock();
+  renderSearchStubBlock();
+  searchHandler();
+  getTodosByCount(3);
+   renderToast(
+       {text: 'Это пример уведомления. Используйте его при необходимости', type: 'success'},
+       {name: 'Понял', handler: () => {console.log('Уведомление закрыто')}}
+   )
+});
+

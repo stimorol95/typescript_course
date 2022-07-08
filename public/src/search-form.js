@@ -1,22 +1,18 @@
 import { renderBlock } from './lib.js';
-export function renderSearchFormBlock(checkInDate, checkOutDate) {
-    const formatDate = (date) => {
-        const y = date.getFullYear();
-        const m = date.getMonth() + 1;
-        const d = date.getDate();
-        return `${y}-${(m < 10) ? ('0' + m) : m}-${(d < 10) ? ('0' + d) : d}`;
-    };
-    const minDate = new Date(checkInDate);
-    minDate.setDate(minDate.getDate() - 1);
-    const maxDate = new Date(checkInDate);
-    maxDate.setMonth(maxDate.getMonth() + 2);
-    maxDate.setDate(0);
-    console.log('cur:', formatDate(minDate));
-    console.log('in: ', formatDate(checkInDate));
-    console.log('out: ', formatDate(checkOutDate));
-    console.log('max: ', formatDate(maxDate));
-    renderBlock('search-form-block', `
-    <form>
+export function renderSearchFormBlock(arrivalDate, departureDate) {
+    const date = new Date();
+    const minDate = new Date().toISOString().split("T")[0];
+    const maxDate = new Date(date.getFullYear(), date.getMonth() + 2, 0)
+        .toISOString()
+        .split("T")[0];
+    const nextDay = (arrivalDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 2)
+        .toISOString()
+        .split("T")[0]);
+    const departureDay = (departureDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 4)
+        .toISOString()
+        .split("T")[0]);
+    renderBlock("search-form-block", `
+    <form class="searchForm" type="submit">
       <fieldset class="search-filedset">
         <div class="row">
           <div>
@@ -32,11 +28,11 @@ export function renderSearchFormBlock(checkInDate, checkOutDate) {
         <div class="row">
           <div>
             <label for="check-in-date">Дата заезда</label>
-            <input id="check-in-date" type="date" value="${formatDate(checkInDate)}" min="${formatDate(minDate)}" max="${formatDate(maxDate)}" name="checkin" />
+            <input id="check-in-date" type="date" value="${arrivalDate}" min="${minDate}" max="${maxDate}" name="checkin" />
           </div>
           <div>
             <label for="check-out-date">Дата выезда</label>
-            <input id="check-out-date" type="date" value="${formatDate(checkOutDate)}" min="${formatDate(minDate)}" max="${formatDate(maxDate)}" name="checkout" />
+            <input id="check-out-date" type="date" value="${departureDate}" min="${nextDay}" max="${departureDay}" name="checkout" />
           </div>
           <div>
             <label for="max-price">Макс. цена суток</label>
