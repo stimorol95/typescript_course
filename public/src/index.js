@@ -25,4 +25,19 @@ window.addEventListener("DOMContentLoaded", () => {
     searchHandler();
     getTodosByCount(3);
     renderToast({ text: 'Это пример уведомления. Используйте его при необходимости', type: 'success' }, { name: 'Понял', handler: () => { console.log('Уведомление закрыто'); } });
+    const btn = document.getElementById('search-btn');
+    btn.addEventListener('click', clickHandler);
+    function clickHandler(e) {
+        e.preventDefault();
+        const data = {
+            city: document.getElementById('city').value,
+            checkInDate: document.getElementById('check-in-date').value,
+            checkOutDate: document.getElementById('check-out-date').value,
+            maxPrice: document.getElementById('max-price').value
+        };
+        search(data);
+    }
+    function search(data) {
+        console.log(data);
+    }
 });
