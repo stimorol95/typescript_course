@@ -1,45 +1,29 @@
-import { renderSearchFormBlock } from './search-form.js';
-import { renderSearchStubBlock } from './search-results.js';
-import { renderUserBlock } from './user.js';
-import { renderToast } from './lib.js';
-const checkInDate = new Date();
-checkInDate.setDate(checkInDate.getDate() + 1);
-const checkOutDate = new Date();
-checkOutDate.setDate(checkInDate.getDate() + 2);
-class userclass {
-    constructor(userName, avatarSrc) {
-        this.userName = userName,
-            this.avatarSrc = avatarSrc;
-    }
+import { renderSearchFormBlock } from "./search-form.js";
+import { renderSearchStubBlock } from "./search-results.js";
+import { renderUserBlock } from "./user.js";
+import { renderToast } from "./lib.js";
+import { searchHandler } from "./search-form-data.js";
+import { getTodosByCount } from "./api.js";
+localStorage.setItem("user", "");
+localStorage.setItem("favoritesAmount", "6");
+localStorage.user = JSON.stringify({
+    userName: "Girl",
+    userAvatar: "/img/avatar.png",
+});
+function getUserData() {
+    let user = JSON.parse(localStorage.getItem("user"));
+    return user;
 }
-const user = new userclass('WadeWarren', 'img/avatar.png');
-localStorage.setItem('user', JSON.stringify(user));
-localStorage.setItem('favoritesAmount', '2');
-function getUserData(key) {
-    const userInfo = JSON.parse(localStorage.getItem(key));
-    if (typeof userInfo === 'object') {
-        return userInfo;
-    }
-    else {
-        console.log('error userInfo');
-    }
+function getFavoritesAmount() {
+    let favorite = localStorage.getItem("favoritesAmount");
+    return favorite;
 }
-function getFavoritesAmount(key) {
-    const userInfo = JSON.parse(localStorage.getItem(key));
-    if (typeof userInfo === 'number') {
-        return userInfo;
-    }
-    else {
-        console.log('error amount');
-    }
-}
-const userName = getUserData('user').userName;
-const avatarSrc = getUserData('user').avatarSrc;
-const favoriteItemsAmount = getFavoritesAmount('favoritesAmount');
-window.addEventListener('DOMContentLoaded', () => {
-    renderUserBlock(userName, avatarSrc, favoriteItemsAmount);
-    renderSearchFormBlock(checkInDate, checkOutDate);
+window.addEventListener("DOMContentLoaded", () => {
+    renderUserBlock(getUserData().userName, getUserData().userAvatar, getFavoritesAmount());
+    renderSearchFormBlock();
     renderSearchStubBlock();
+    searchHandler();
+    getTodosByCount(3);
     renderToast({ text: 'Это пример уведомления. Используйте его при необходимости', type: 'success' }, { name: 'Понял', handler: () => { console.log('Уведомление закрыто'); } });
     const btn = document.getElementById('search-btn');
     btn.addEventListener('click', clickHandler);
