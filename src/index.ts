@@ -44,4 +44,3 @@ window.addEventListener("DOMContentLoaded", () => {
        {name: 'Понял', handler: () => {console.log('Уведомление закрыто')}}
    )
 });
-
